@@ -34,6 +34,7 @@ func main() {
 	flag.StringVar(&conf.DstDir, "dst", generatedDir, "Destination folder")
 	flag.BoolVar(&conf.Debug, "debug", false, "debug mode")
 	flag.BoolVar(&conf.RemoveAccountSuffix, "remove-account-suffix", false, "Remove \"Account\" suffix from accessors (if leads to duplication, e.g. \"SetFooAccountAccount\")")
+	flag.BoolVar(&conf.WithTests, "tests", false, "Generate test files")
 
 	flag.StringVar((*string)(&conf.Encoding), "codec", string(EncodingBorsh), "Choose codec")
 	flag.StringVar((*string)(&conf.TypeID), "type-id", string(TypeIDAnchor), "Choose typeID kind")
@@ -1000,7 +1001,7 @@ func GenerateClientFromProgramIDL(idl IDL) ([]*FileWrapper, error) {
 		})
 	}
 
-	{
+	if conf.WithTests {
 		testFiles, err := genTestingFuncs(idl)
 		if err != nil {
 			return nil, err
